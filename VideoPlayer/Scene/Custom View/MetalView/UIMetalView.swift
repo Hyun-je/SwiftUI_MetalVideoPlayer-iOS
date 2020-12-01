@@ -115,12 +115,12 @@ class UIMetalView: MTKView {
     
     public func loadVideo(url: URL?) {
        
-        guard let url = url else { return }
+        guard let url = url, videoURL != url
+        else { return }
         
         videoURL = url
 
         let asset = AVURLAsset(url: url)
-        
         let playerItem = AVPlayerItem(asset: asset)
         playerItem.add(playerItemVideoOutput)
 

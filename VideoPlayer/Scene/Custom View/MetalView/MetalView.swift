@@ -68,10 +68,8 @@ extension MetalView: UIViewRepresentable {
     func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<MetalView>) {
         
         guard let metalView = uiView as? UIMetalView else { return }
+        metalView.loadVideo(url: videoURL)
         
-        if metalView.videoURL != videoURL {
-            metalView.loadVideo(url: videoURL)
-        }
     }
 
 }
