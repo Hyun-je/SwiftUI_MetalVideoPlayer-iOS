@@ -29,12 +29,12 @@ class UIMetalView: MTKView {
     private(set) var videoURL   = URL?.none
     
 
-    lazy var playerItemVideoOutput: AVPlayerItemVideoOutput = {
+    lazy private var playerItemVideoOutput: AVPlayerItemVideoOutput = {
         let attributes = [kCVPixelBufferPixelFormatTypeKey as String : Int(kCVPixelFormatType_32BGRA)]
         return AVPlayerItemVideoOutput(pixelBufferAttributes: attributes)
     }()
     
-    lazy var displayLink: CADisplayLink = {
+    lazy private var displayLink: CADisplayLink = {
         let displayLink = CADisplayLink(target: self, selector: #selector(readBuffer))
         displayLink.add(to: .current, forMode: .default)
         displayLink.isPaused = true
