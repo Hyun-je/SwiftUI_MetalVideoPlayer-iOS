@@ -41,6 +41,7 @@ class UIMetalView: MTKView {
         return displayLink
     }()
     
+    var pixelBuffer: CVPixelBuffer?
     var filterSource: UIMetalViewFilterSource?
 
     
@@ -60,6 +61,7 @@ class UIMetalView: MTKView {
 
         framebufferOnly = false
         enableSetNeedsDisplay = true
+        delegate = self
 
         contentMode = .scaleAspectFit
 
@@ -74,8 +76,9 @@ class UIMetalView: MTKView {
         let currentTime = playerItemVideoOutput.itemTime(forHostTime: nextVSync)
         
         if playerItemVideoOutput.hasNewPixelBuffer(forItemTime: currentTime) {
-            let pixelBuffer = playerItemVideoOutput.copyPixelBuffer(forItemTime: currentTime, itemTimeForDisplay: nil)
-            render(pixelBuffer: pixelBuffer)
+            pixelBuffer = playerItemVideoOutput.copyPixelBuffer(forItemTime: currentTime, itemTimeForDisplay: nil)
+
+            setNeedsDisplay()
         }
     }
     
@@ -106,10 +109,8 @@ class UIMetalView: MTKView {
 
         commandBuffer.present(drawable)
         commandBuffer.commit()
-        
-        setNeedsDisplay()
+
     }
-   
    
 
     
@@ -130,4 +131,19 @@ class UIMetalView: MTKView {
         displayLink.isPaused = false
     }
    
+}
+
+
+
+
+extension UIMetalView: MTKViewDelegate {
+    
+    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        
+    }
+    
+    func draw(in view: MTKView) {
+        render(pixelBuffer: pixelBuffer)
+    }
+    
 }
